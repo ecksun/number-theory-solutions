@@ -104,7 +104,7 @@ return $n(x/d) + n(d)$. The base case in the recursion is when it is called
 with a prime number. In this case, return 1.  This can be checked in constant
 time with the table used in the sieve.
 
-% TODO
+% TODO correct?
 %n(x):
 %if x is prime:
 %    return 1
@@ -112,19 +112,45 @@ time with the table used in the sieve.
 %    for prime p in primes_list:
 %        if p divides x:
 %            return n(x/p) + 1
+
+\begin{algorithm}
+    \caption{$n(x)$}
+    \label{lst:nx}
+    \begin{algorithmic}
+        \IF{$x$ is prime}
+            \RETURN $1$
+        \ENDIF
+        \FOR{prime $p \le N$}
+            \IF{$p | x$}
+                \RETURN $n(x/p) + 1$
+            \ENDIF
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
     
 
 Before returning the number of factors in a number, we save it in a table, to
-avoid doing the same job twice. To get the final answer, we just have to go
-through the range from $2$ to $10^6$ (which is the maximum value in the KATTIS
-problem), and add up the number of factors, like this:
+avoid doing the same job more than once. To get the final answer, we just have
+to go through the range from $2$ to $10^6$ (which is the maximum value in the
+KATTIS problem), and add up the number of factors, like this:
 
-% TODO
+% TODO correct?
 %count[i] = 0 for all i
 %for (i = 2 to 10^6)
 %    count[i] = count[i-1] + n(i)
 
-The answer for a number x is now found in $count[x]$.
+\begin{algorithm}
+    \caption{Count factors}
+    \label{factorcount}
+    \begin{algorithmic}
+        \STATE $count[1] = 0$
+        \FOR{$i = 2 \to 10^6$}
+            \STATE $count[i] = count[i-1] + n(i)$
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+The answer for a number $x$ is now found in $count[x]$.
 \section{Jackpot}
 
 Given the jackpot periodicity of the wheels we want to find the least amount of
