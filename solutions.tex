@@ -84,11 +84,25 @@ factorization of a number $N$. Then
 
 $n(N!) = n(2 * 3 * … * (N-1) * (N)) = n(2) + n(3) + … + n(N-1) + n(N)$
 
-Use the Sieve of Eratosthenes to generate all primes in the range, and save
-these in a list. To calculate $n(x)$, we try dividing $x$ by the primes in our
-list. When we find such a number $d$, we return $n(x/d) + n(d)$. The base case in
-the recursion is when it is called with a prime number. In this case, return 1.
-This can be checked in constant time with the table used in the sieve.
+\begin{algorithm}
+    \caption{Sieve of Eratosthenes}
+    \label{lst:primesieve}
+    \begin{algorithmic}
+        \STATE prime[] \COMMENT{A boolean list with size N, all set to true}
+        \FOR{$i = 2 \to N$}
+            \FOR{$j = 2 \to N/i$}
+                \STATE $prime[i*j] = FALSE$
+            \ENDFOR
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+            
+Use the Sieve of Eratosthenes (Algorithm \ref{lst:primesieve}) to generate all
+primes in the range, and save these in a list. To calculate $n(x)$, we try
+dividing $x$ by the primes in our list. When we find such a number $d$, we
+return $n(x/d) + n(d)$. The base case in the recursion is when it is called
+with a prime number. In this case, return 1.  This can be checked in constant
+time with the table used in the sieve.
 
 % TODO
 %n(x):
@@ -98,6 +112,7 @@ This can be checked in constant time with the table used in the sieve.
 %    for prime p in primes_list:
 %        if p divides x:
 %            return n(x/p) + 1
+    
 
 Before returning the number of factors in a number, we save it in a table, to
 avoid doing the same job twice. To get the final answer, we just have to go
@@ -324,7 +339,7 @@ In the next step we take a H-prime number from the previous list we created. We
 then take another H-prime number which is the same or larger and calculate the
 product of those. The product of those are a semi-prime H-number.
 
-% TODO
+% TODO is it correct?
 %    for i in range(5, sqrt(LIMIT), 4):
 %        if i is H-prime:
 %            for j in range(i, LIMIT):
