@@ -1,0 +1,377 @@
+%
+% DO NOT CHANGE THIS TEMPLATE!
+%
+% To allow combining the lecture notes from different scribes in a
+% simple way all scribes must use the same header.
+%
+% If you think the template lack a package, then contact the lecturer,
+% and we will probably extend the template with your favorite package.
+%
+
+\documentclass[11pt,a4paper,twoside]{article}
+\usepackage{alg}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+
+\begin{document}
+\pagestyle{myheadings}
+\thispagestyle{plain}
+
+\newcommand{\lecture}[4] { %
+\newcommand{\fdatum}{#1}%
+\newcommand{\fnummer}{#2}%
+\newcommand{\frubrik}{#3}%
+\newcommand{\fskribent}{#4}%
+\markboth{DD2458 -- Popup VT 2011}{\frubrik}%
+\hrule
+\begin{center}
+\large \bf 
+DD2458, Problem Solving and Programming Under Pressure
+
+\vspace*{2mm}
+\Large \bf 
+Homework solutions week \fnummer: \frubrik
+\end{center}
+\small
+\noindent Date: \fdatum
+\\
+Scribe(s): \fskribent
+\\
+\hrule
+\vspace{5mm}
+}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{definition}[theorem]{Definition}
+
+% \lecture{date}{lecture number}{lecture headline}{lecturer}{scribe}
+%
+%
+%
+
+%%%%% Edit after this row. The above should not need editing. %%%%%
+
+%%%%% Define your own stuff here. %%%%%
+
+\newcommand{\zed}{\mathbb{Z}}
+\newcommand{\nat}{\mathbb{N}}
+\newcommand{\GF}[1]{\mathrm{GF}_{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\lecture{2011-04-14}{9}{Number Theory}{Joel Bohman, Linus Wallgren, Oskar Werkelin Ahlin}
+
+\section{Factorial Factors}
+In this problem, we want to find the maximum number of factors that can be
+multiplied together to produce $N!$, given a number $N$.
+
+The maximum number of such factors is found in the prime factorization of the
+number. Finding such a factorization for a number can easily be done using
+trial division. But in this case, we want to find it for the factorial of the
+given number.
+
+Let us define a function $n(N)$ that denotes the number of prime factors in the
+factorization of a number $N$. Then
+
+$n(N!) = n(2 * 3 * … * (N-1) * (N)) = n(2) + n(3) + … + n(N-1) + n(N)$
+
+Use the Sieve of Eratosthenes to generate all primes in the range, and save
+these in a list. To calculate $n(x)$, we try dividing $x$ by the primes in our
+list. When we find such a number $d$, we return $n(x/d) + n(d)$. The base case in
+the recursion is when it is called with a prime number. In this case, return 1.
+This can be checked in constant time with the table used in the sieve.
+
+% TODO
+%n(x):
+%if x is prime:
+%    return 1
+%else:
+%    for prime p in primes_list:
+%        if p divides x:
+%            return n(x/p) + 1
+
+Before returning the number of factors in a number, we save it in a table, to
+avoid doing the same job twice. To get the final answer, we just have to go
+through the range from $2$ to $10^6$ (which is the maximum value in the KATTIS
+problem), and add up the number of factors, like this:
+
+% TODO
+%count[i] = 0 for all i
+%for (i = 2 to 10^6)
+%    count[i] = count[i-1] + n(i)
+
+The answer for a number x is now found in $count[x]$.
+\section{Jackpot}
+
+Given the jackpot periodicity of the wheels we want to find the least amount of
+games needed to play before the first jackpot, which is equivalent to LCM
+(Least Common Multiple).
+
+Förslag (laggar sönder):
+
+Given the jackpot periodicity of each wheel, we want to find the jackpot
+periodicity of the entire machine.
+
+We can implement LCM with GCD (Greatest common divisor).
+
+% TODO
+%| a * b | / GCD(a, b)
+
+We can rewrite this so we do not get any overflows
+
+% TODO
+%    a / GCD(a, b) * b
+
+\section{Repeating Decimals (*)}
+
+In this problem, we want to find the repeating decimal cycle of a rational
+number $p/q$, given integers $p$ and $q$. None of these will exceed $3000$, and
+they will be positive. We want to print the number in its decimal notation,
+placing the repeating decimals inside parentheses. We also want to count the
+number of decimals inside the repeating cycle.
+
+The left-most part of the decimal mark is found in $\lfloor{p/q}\rfloor$. From this
+division, we get a rest. Let us call the rest $r$, and give it the value $p
+\mod q$. To get the decimal expansion, we let $r *= 10$. Now the first digit
+after the decimal mark is found in $\lfloor{r/q}\rfloor$. This procedure will repeat
+exactly until we get the same rest that we got in a previous step. It is clear
+that when this happens, we will get an infinite loop of the same cycle.
+
+We need an efficient way to store the rests we had and where they appeared. The
+maximum number of different rests is limited to the maximum possible value of
+$q$ (since the rests are calculated $\mod q$). This means that there is a
+maximum of $3000$ rests for a number. Use an integer array to map a rest to its
+first occurrence in the decimal expansion, and let all unseen rests have value
+$-1$.  Let us also use the array $digit[]$ to save the actual digits in the
+expansion.
+
+% TODO
+%init seen[] to -1
+%r = p % q
+%seen[r] = 0 // first rest seen at index 0
+%set i = 0
+%while (true)
+%    if (r == 0)
+%        break
+%    r *= 10
+%    digit[i] = $\floor(r/q)$
+%    r = r%q
+%    if (seen[r] != -1)
+%        // the cycle starts at seen[r] and ends at i
+%        break
+%    seen[r] = i+1
+%    ++i
+       
+If the decimal expansion is finite (e.g. we get rest zero in the division), the
+repeating cycle has length one and contains a single zero. Otherwise, we print
+the decimal expansion. In the KATTIS problem, we don't want to print any more
+than $50$ digits. If the cycle ends after more than $50$ digits (from the
+decimal mark, not the start of the cycle) we print "..." and end it with a
+right parenthesis. The number of decimals in the cycle is $1$ in the case of
+$r==0$, otherwise it is found in the difference between the end and starting
+point of the cycle, as seen in the pseudo code above.
+
+\section{The Stern-Brocot Number System}
+
+Given the stern-brocot number system we are to calculate the number of a given
+fraction. Each number in the system is dependant on two previous, lets call
+them the left and right parent. The new node is calculated by adding the
+numerator of the two parents, to get the new numerator, and adding the
+denominators of the parents to get the new denominator.
+
+% TODO
+%Parent_l = a/b
+%Parent_r = c/d
+%Child = (a+c)/(b+d)
+
+To find the path to a node we simply have to check if the current node is
+bigger or smaller than our target node. The current node is always the child of
+the two parents. In the beginning the left parent will be $\frac{0}{1}$ and the
+right parent $\frac{1}{0}$.
+
+% TODO
+%fraction left(0,1)
+%fraction right(1,0)
+%fraction current(left, right) // Compute the current node from the two parents, left and right
+%    while (current != target)
+%        if (target > current)
+%            left = current
+%            print “R”
+%        else
+%            right = current
+%            print “L”
+%        current = frac(left, right) // Generate a new node.
+
+\section{Riemann vs. Mertens}
+
+The naive solution is to simply use trial division to factor each number from
+$1$ to $1000000$, and depending on the number of factors and if there is two of
+one of them, assign the correct value. This would take far too long time, so we
+need to do something smarter.
+
+Since we need to calculate the Mobius function for all values in the range we
+can use every prime number less than or equal to $\sqrt{1000000}$, and square
+it, and mark that off as a number that is not square free.
+
+The next step is to calculate the number of factors in each number. For each
+number we can simply use trial division to remove one factor and recursively
+call the Mobius function for that value. Each recursion we multiply with $-1$,
+so the end result will be $(i-1)^n$ where n is the number of recursions, that
+is, the number of factors, which will be $1$ if even and $-1$ if odd. As
+performance will be an issue with doing this the naive way we can simply cache
+the results, as they will be used more than once, and in order to get cleaner
+code we can add $-1$ to all primes in the beginning, when we do the prime sieve
+to calculate them.
+
+% TODO
+%// THE RECURSIVE FUNCTION HERE; IN PSEUDO CODE
+%
+%function mobius(N):
+%
+%    if cache[N] is not UNDEFINED:
+%
+%        return cache[N]
+%
+%    for each prime p:
+%
+%        if p divides N:
+%
+%            cache[N] = - mobius(N / p)
+%
+%            return cache[N]
+%
+%
+%
+%
+%function mobius(N):
+%
+%    if cache[N] is defined:
+%
+%        return cache[N]
+%
+%    else if N is prime:
+%
+%        cache[N] = -1
+%
+%        return -1
+%
+%    else:
+%
+%        for prime p in primes:
+%
+%            if p divides N:
+%
+%                if p*p divides N:
+%
+%                    cache[N] = 0
+%
+%                    return 0
+%
+%                cache[N] = -1 * mobius(N / p)
+%
+%                return cache[N]
+
+
+The Mertens function is easily done in $O(N)$ time, simply iterate through all
+numbers and keep track of the value from the last iteration and add the Mobius
+value from this iteration. As each value in the Mertens function is dependant
+on the previous ones, and we know we are going to have to do a lookup more than
+once, we can simply calculate every value and save it.
+
+\section{Semi-prime H-numbers (*)}
+We want to count the number of H-semi-primes. This can be achieved in $3$ steps.
+
+In the first step we want to create a list of all H-prime numbers in the
+sequence created by $4n + 1$ for any positive $n$. A H-prime is the product of
+only the unit (which is $1$) and the H-prime itself. We begin by setting all
+numbers in the range as H-primes and use a modified sieve of Eratosthenes to
+find all non H-primes and mark those in the list.
+
+% TODO korrekt?
+%    for i in range(5, sqrt(LIMIT), 4):
+%        if i is H-prime:
+%            for j in range(i * i, LIMIT, i):
+%                j is not H-prime
+
+\begin{algorithm}
+    \caption{H-prime sieve}
+    \label{H-prime sieve}
+    \begin{algorithmic}
+        \STATE $i = 5$
+        \WHILE{$i \le \sqrt{LIMIT}$}
+            \IF{$i$ is H-prime}
+                \STATE $j = i*i$
+                \WHILE{$j \le LIMIT$}
+                    \STATE $j$ is not H-prime % TODO det här ser fel ut
+                    \STATE $j = j + i$
+                \ENDWHILE
+            \ENDIF
+            \STATE $i = i + 4$
+        \ENDWHILE
+    \end{algorithmic}
+\end{algorithm}
+
+In the next step we take a H-prime number from the previous list we created. We
+then take another H-prime number which is the same or larger and calculate the
+product of those. The product of those are a semi-prime H-number.
+
+% TODO
+%    for i in range(5, sqrt(LIMIT), 4):
+%        if i is H-prime:
+%            for j in range(i, LIMIT):
+%                if i * j >= LIMIT:
+%                    break;
+%
+%                if j is H-prime:
+%                    i * j is semi-prime
+\begin{algorithm}
+    \caption{Calculate semi-prime H-numbers}
+    \label{Semi-prime H-numbers}
+    \begin{algorithmic}
+        \FOR{all H-primes $i$}
+            \FOR{all H-primes $j \ge i$}
+                \STATE $i * j$ is semi-prime
+            \ENDFOR
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+What remains to be done is to count every semi-prime H-number.
+
+% TODO Is it correct?
+%    result = []
+%    count = 0
+%    for i in range(5, LIMIT, 4):
+%        if i is semi-prime:
+%            count += 1
+%        result[i] = count
+\begin{algorithm}
+    \caption{Count semi-prime H-numbers}
+    \label{Count semi-prime H-numbers}
+    \begin{algorithmic}
+        \STATE $result = []$
+        \STATE $count = 0$
+        \STATE $i = 5$
+        \WHILE{$i \le LIMIT$}
+            \IF{$i$ is semi-prime}
+                \STATE $count = count + 1$
+            \ENDIF
+            \STATE $i = i + 4$
+        \ENDWHILE
+    \end{algorithmic}
+\end{algorithm}
+
+The result list now contains the answer for every valid input.
+
+% TODO fix links everywhere, but how?
+
+\end{document}
