@@ -272,8 +272,9 @@ one of them, assign the correct value. This would take far too long time, so we
 need to do something smarter.
 
 Since we need to calculate the Mobius function for all values in the range we
-can use every prime number less than or equal to $\sqrt{1000000}$, and square
-it, and mark that off as a number that is not square free.
+can use every prime number less than or equal to $\sqrt{1000000}$ with
+algorithm \ref{lst:primesieve}, and square it, and mark that off as a number
+that is not square free.
 
 The next step is to calculate the number of factors in each number. For each
 number we can simply use trial division to remove one factor and recursively
@@ -285,54 +286,22 @@ the results, as they will be used more than once, and in order to get cleaner
 code we can add $-1$ to all primes in the beginning, when we do the prime sieve
 to calculate them.
 
-% TODO
-%// THE RECURSIVE FUNCTION HERE; IN PSEUDO CODE
-%
-%function mobius(N):
-%
-%    if cache[N] is not UNDEFINED:
-%
-%        return cache[N]
-%
-%    for each prime p:
-%
-%        if p divides N:
-%
-%            cache[N] = - mobius(N / p)
-%
-%            return cache[N]
-%
-%
-%
-%
-%function mobius(N):
-%
-%    if cache[N] is defined:
-%
-%        return cache[N]
-%
-%    else if N is prime:
-%
-%        cache[N] = -1
-%
-%        return -1
-%
-%    else:
-%
-%        for prime p in primes:
-%
-%            if p divides N:
-%
-%                if p*p divides N:
-%
-%                    cache[N] = 0
-%
-%                    return 0
-%
-%                cache[N] = -1 * mobius(N / p)
-%
-%                return cache[N]
-
+\begin{algorithm}
+    \label{mobius}
+    \caption{The mobius function}
+    \begin{algorithmic}
+        \REQUIRE Input: $N$
+        \IF{$cache[N]$ is DEFINED}
+            \RETURN $cache[N]$
+        \ENDIF
+        \FOR{prime $p \le N$}
+            \IF {$p | N$}
+                \STATE $cache[N] = - mobius(N/p)$
+                \RETURN $cache[N]$
+            \ENDIF
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
 
 The Mertens function is easily done in $O(N)$ time, simply iterate through all
 numbers and keep track of the value from the last iteration and add the Mobius
