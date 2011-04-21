@@ -127,22 +127,12 @@ problem), and add up the number of factors, like this:
 The answer for a number x is now found in $count[x]$.
 \section{Jackpot}
 
-Given the jackpot periodicity of the wheels we want to find the least amount of
-games needed to play before the first jackpot, which is equivalent to LCM
-(Least Common Multiple).
+The problem statement asks us to find the jackpot periodicityi $P$ of an entire machine, given the jackpot periodicities $p_{1},p_{2},...,p_{n}$ for the individual wheels in the machine. The answer is the smallest integer P such that $p_{i}$ divides P, for all $i \in {1,2,...,n}$.
 
-Förslag (laggar sönder):
-
-Given the jackpot periodicity of each wheel, we want to find the jackpot
-periodicity of the entire machine.
-
-We can implement LCM with GCD (Greatest common divisor).
-
+This integer is found by computing the least common multiple of integers $p_{1},p_{2},...,p_{n}$. LCM can be computed using an implementation of GCD, in the following way:
 % TODO
 %| a * b | / GCD(a, b)
-
 We can rewrite this so we do not get any overflows
-
 % TODO
 %    a / GCD(a, b) * b
 
