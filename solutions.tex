@@ -209,11 +209,9 @@ point of the cycle, as seen in the pseudo code above.
 
 \section{The Stern-Brocot Number System}
 
-Given the stern-brocot number system we are to calculate the number of a given
-fraction. Each number in the system is dependant on two previous, lets call
-them the left and right parent. The new node is calculated by adding the
-numerator of the two parents, to get the new numerator, and adding the
-denominators of the parents to get the new denominator.
+The Stern-Brocot number system is an elegant way to express all fractions $p/q$ where $p$ and $q$ are relatively prime. In this problem, we want to find the path from the root of the tree to a fraction $p'/q'$, given $p'$ and $q'$. 
+
+We call the current node $C$. We start our path in the root node with $C = C_{p}/C_{q}, C_{p} = 1, C_{q} = 1$. Let us also call the target node $T = T_{p}/T_{q}$. If $T > C$, we go right, otherwise we go left. When changing the current node, we let $C = C + L$ if we went left, and $C = C + R$ if we went right. $L$ and $R$ are pointers to the two adjacent nodes, initially set to $0/1$ and $1/0$.
 
 % TODO
 %Parent_l = a/b
