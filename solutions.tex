@@ -127,14 +127,36 @@ problem), and add up the number of factors, like this:
 The answer for a number x is now found in $count[x]$.
 \section{Jackpot}
 
-The problem statement asks us to find the jackpot periodicityi $P$ of an entire machine, given the jackpot periodicities $p_{1},p_{2},...,p_{n}$ for the individual wheels in the machine. The answer is the smallest integer P such that $p_{i}$ divides P, for all $i \in {1,2,...,n}$.
+The problem statement asks us to find the jackpot periodicity $P$ of an entire machine, given the jackpot periodicities $p_{1},p_{2},...,p_{n}$ for the individual wheels in the machine. The answer is the smallest integer P such that $p_{i}$ divides P, for all $i \in {1,2,...,n}$.
 
 This integer is found by computing the least common multiple of integers $p_{1},p_{2},...,p_{n}$. LCM can be computed using an implementation of GCD, in the following way:
+
+\begin{algorithm}
+    \caption{LCM}
+    \label{LCM}
+    \begin{algorithmic}
+        \STATE a * b / GCD(a, b)
+    \end{algorithmic}
+\end{algorithm}
+
+
 % TODO
 %| a * b | / GCD(a, b)
 We can rewrite this so we do not get any overflows
 % TODO
 %    a / GCD(a, b) * b
+
+\begin{algorithm}
+    \caption{LCM improvement}
+    \label{LCM improvement}
+    \begin{algorithmic}
+        \STATE a / GCD(a, b) * b
+    \end{algorithmic}
+\end{algorithm}
+
+
+
+
 
 \section{Repeating Decimals (*)}
 
