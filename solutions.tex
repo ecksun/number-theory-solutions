@@ -203,17 +203,18 @@ We can rewrite this so we do not get any overflows
 \section{Repeating Decimals (*)}
 
 In this problem, we want to find the repeating decimal cycle of a rational
-number $p/q$, given integers $p$ and $q$. None of these will exceed $3000$, and
+number $\frac{p}{q}$, given integers $p$ and $q$. None of these will exceed $3000$, and
 they will be positive. We want to print the number in its decimal notation,
 placing the repeating decimals inside parentheses. We also want to count the
 number of decimals inside the repeating cycle.
 
-The left-most part of the decimal mark is found in $\lfloor{p/q}\rfloor$. From this
-division, we get a rest. Let us call the rest $r$, and give it the value $p
-\mod q$. To get the decimal expansion, we let $r *= 10$. Now the first digit
-after the decimal mark is found in $\lfloor{r/q}\rfloor$. This procedure will repeat
-exactly until we get the same rest that we got in a previous step. It is clear
-that when this happens, we will get an infinite loop of the same cycle.
+The left-most part of the decimal mark is found in
+$\lfloor{\frac{p}{q}}\rfloor$. From this division, we get a rest. Let us call
+the rest $r$, and give it the value $p \mod q$. To get the decimal expansion,
+we let $r = r * 10$. Now the first digit after the decimal mark is found in
+$\lfloor{\frac{r}{q}}\rfloor$. This procedure will repeat until we get the same
+rest that we got in a previous step. It is clear that when this happens, we
+will get an infinite loop of the same cycle.
 
 We need an efficient way to store the rests we had and where they appeared. The
 maximum number of different rests is limited to the maximum possible value of
@@ -239,6 +240,29 @@ expansion.
 %        break
 %    seen[r] = i+1
 %    ++i
+
+\begin{algorithm}
+    \caption{Long division}
+    \label{lst:Long division}
+    \begin{algorithmic}
+        \STATE Initialize $seen[]$ to $-1$
+        \STATE $r = p \% q$
+        \STATE $seen[r] = 0$ \COMMENT{First rest seen at index 0}
+        \STATE $i = 0$
+        \WHILE {$r \neq 0$}
+            \STATE $r = r * 10$
+            \STATE $digit[i] = \lfloor\frac{r}{q}\rfloor$
+            \STATE $r = r \% q$
+            \IF {$seen[r] \neq -1$}
+                \STATE \COMMENT {The cycle starts at $seen[r]$ and ends at $i$}
+                \STATE \em{break} % TODO Make bold
+            \ENDIF
+            \STATE $seen[r] = i + 1 $
+            \STATE $ i = i + 1$
+        \ENDWHILE
+    \end{algorithmic}
+\end{algorithm}
+
        
 If the decimal expansion is finite (e.g. we get rest zero in the division), the
 repeating cycle has length one and contains a single zero. Otherwise, we print
@@ -251,19 +275,56 @@ point of the cycle, as seen in the pseudo code above.
 
 \section{The Stern-Brocot Number System}
 
-The Stern-Brocot number system is an elegant way to express all fractions $p/q$ where $p$ and $q$ are relatively prime. In this problem, we want to find the path from the root of the tree to a fraction $p'/q'$, given $p'$ and $q'$. 
+The Stern-Brocot number system is an elegant way to express all fractions
+$\frac{p}{q}$ where $p$ and $q$ are relatively prime. In this problem, we want
+to find the path from the root of the tree to a fraction $\frac{p'}{q'}$, given
+$p'$ and $q'$. 
 
-We call the current node $C$. We start our path in the root node with $C = C_{p}/C_{q}, C_{p} = 1, C_{q} = 1$. Let us also call the target node $T = T_{p}/T_{q}$. If $T > C$, we go right, otherwise we go left. When changing the current node, we let $C = C + L$ if we went left, and $C = C + R$ if we went right. $L$ and $R$ are pointers to the two adjacent nodes, initially set to $0/1$ and $1/0$.
+We call the current node $C$. We start our path in the root node with $C =
+C_{p}/C_{q}, C_{p} = 1, C_{q} = 1$. Let us also call the target node $T =
+T_{p}/T_{q}$. If $T > C$, we go right, otherwise we go left. When changing the
+current node, we let $C = C + L$ if we went left, and $C = C + R$ if we went
+right. $L$ and $R$ are pointers to the two adjacent nodes, initially set to
+$\frac{0}{1}$ and $\frac{1}{0}$.
 
 % TODO
 %Parent_l = a/b
 %Parent_r = c/d
 %Child = (a+c)/(b+d)
 
+$Parent_{left} = \frac{a}{b}$
+
+$Parent_{right} = \frac{c}{d}$
+
+$Child = \frac{a+c}{b+d}$
+
+
 To find the path to a node we simply have to check if the current node is
 bigger or smaller than our target node. The current node is always the child of
 the two parents. In the beginning the left parent will be $\frac{0}{1}$ and the
-right parent $\frac{1}{0}$.
+right parent $\frac{1}{0}$. In algorithm \ref{lst:sternbrocot} we use a simple
+structure, fraction, which stores a fraction as its enumerator and denominator.
+
+\begin{algorithm}
+    \caption{Calculate path in the Stern Brocot number system}
+    \label{sternbrocot}
+    \begin{algorithmic}
+        \STATE fraction $left = \frac{0}{1}$
+        \STATE fraction $right = \frac{1}{0}$
+        \STATE fraction $current(left, right)$ \COMMENT{Compute a new node from its two parents, left and right}
+        \WHILE{$current \neq target$}
+            \IF {$target > current$}
+                \STATE $left = current$
+                \PRINT R
+            \ELSE
+                \STATE $right = current$
+                \PRINT L
+            \ENDIF
+            \STATE current = fraction(left, right) \COMMENT{Generate a new node from the new parents}
+        \ENDWHILE
+    \end{algorithmic}
+\end{algorithm}
+
 
 % TODO
 %fraction left(0,1)
