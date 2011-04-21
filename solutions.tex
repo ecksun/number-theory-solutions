@@ -73,17 +73,15 @@ Scribe(s): \fskribent
 \section{Factorial Factors}
 In this problem, we want to find the maximum number of factors that can be
 multiplied together to produce $N!$, given a number $N$.
-
 The maximum number of such factors is found in the prime factorization of the
 number. Finding such a factorization for a number can easily be done using
 trial division. But in this case, we want to find it for the factorial of the
 given number.
-
 Let us define a function $n(N)$ that denotes the number of prime factors in the
 factorization of a number $N$. Then
-
+\\\\
 $n(N!) = n(2 * 3 * ... * (N-1) * (N)) = n(2) + n(3) + ... + n(N-1) + n(N)$
-
+\\
 \begin{algorithm}
     \caption{Sieve of Eratosthenes}
     \label{lst:primesieve}
@@ -97,7 +95,7 @@ $n(N!) = n(2 * 3 * ... * (N-1) * (N)) = n(2) + n(3) + ... + n(N-1) + n(N)$
     \end{algorithmic}
 \end{algorithm}
             
-Use the Sieve of Eratosthenes (Algorithm \ref{lst:primesieve}) to generate all
+\noindent{Use} the Sieve of Eratosthenes (Algorithm \ref{lst:primesieve}) to generate all
 primes in the range, and save these in a list. To calculate $n(x)$, we try
 dividing $x$ by the primes in our list. When we find such a number $d$, we
 return $n(x/d) + n(d)$. The base case in the recursion is when it is called
@@ -129,7 +127,7 @@ time with the table used in the sieve.
 \end{algorithm}
     
 
-Before returning the number of factors in a number, we save it in a table, to
+\noindent{Before} returning the number of factors in a number, we save it in a table, to
 avoid doing the same job more than once. To get the final answer, we just have
 to go through the range from $2$ to $10^6$ (which is the maximum value in the
 KATTIS problem), and add up the number of factors, like this:
@@ -150,54 +148,29 @@ KATTIS problem), and add up the number of factors, like this:
     \end{algorithmic}
 \end{algorithm}
 
-The answer for a number $x$ is now found in $count[x]$.
+\noindent{The} answer for a number $x$ is now found in $count[x]$.
 \section{Jackpot}
 
 The problem statement asks us to find the jackpot periodicity $P$ of an entire
 machine, given the jackpot periodicities $p_{1},p_{2},...,p_{n}$ for the
 individual wheels in the machine. The answer is the smallest integer P such
 that $p_{i}$ divides P, for all $i \in {1,2,...,n}$.
-
-This integer is found by computing the least common multiple of integers
+\\\\
+\noindent{This} integer is found by computing the least common multiple of integers
 $p_{1},p_{2},...,p_{n}$. LCM can be computed using an implementation of GCD
-(algorithm \ref{lst:GCD}), in the following way:
+(algorithm \ref{lst:LCM}), in the following way:
 
 \begin{algorithm}
     \caption{LCM - Least common multiplier}
     \label{lst:LCM}
     \begin{algorithmic}
         \REQUIRE Input: $a$, $b$
-        \RETURN $ \frac{|a * b|}{GCD(a, b)}$
+        \RETURN $ \frac{a}{gcd(a, b)}*b$
     \end{algorithmic}
 \end{algorithm}
 
 % TODO
 %| a * b | / GCD(a, b)
-We can rewrite this so we do not get any overflows
-% TODO
-%    a / GCD(a, b) * b
-
-\begin{algorithm}
-    \caption{LCM improvement}
-    \label{lst:LCM improvement}
-    \begin{algorithmic}
-        \REQUIRE Input: $a$, $b$
-        \RETURN $\frac{a}{GCD(a, b) * b}$
-    \end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}
-    \caption{GCD - Greatest Common Divisor}
-    \label{lst:GCD}
-    \begin{algorithmic}
-        \REQUIRE Input: $a$, $b$
-        \IF{$b = 0$}
-            \RETURN a
-        \ENDIF
-        \RETURN $GCD(b, a \% b)$
-    \end{algorithmic}
-\end{algorithm}
-
 
 
 \section{Repeating Decimals (*)}
@@ -207,16 +180,16 @@ number $\frac{p}{q}$, given integers $p$ and $q$. None of these will exceed $300
 they will be positive. We want to print the number in its decimal notation,
 placing the repeating decimals inside parentheses. We also want to count the
 number of decimals inside the repeating cycle.
-
-The left-most part of the decimal mark is found in
+\\\\
+\noindent{The} left-most part of the decimal mark is found in
 $\lfloor{\frac{p}{q}}\rfloor$. From this division, we get a rest. Let us call
 the rest $r$, and give it the value $p \mod q$. To get the decimal expansion,
 we let $r = r * 10$. Now the first digit after the decimal mark is found in
 $\lfloor{\frac{r}{q}}\rfloor$. This procedure will repeat until we get the same
 rest that we got in a previous step. It is clear that when this happens, we
 will get an infinite loop of the same cycle.
-
-We need an efficient way to store the rests we had and where they appeared. The
+\\\\
+\noindent{We} need an efficient way to store the rests we had and where they appeared. The
 maximum number of different rests is limited to the maximum possible value of
 $q$ (since the rests are calculated $\mod q$). This means that there is a
 maximum of $3000$ rests for a number. Use an integer array to map a rest to its
@@ -246,13 +219,13 @@ expansion.
     \label{lst:Long division}
     \begin{algorithmic}
         \STATE Initialize $seen[]$ to $-1$
-        \STATE $r = p \% q$
+        \STATE $r = p \mod q$
         \STATE $seen[r] = 0$ \COMMENT{First rest seen at index 0}
         \STATE $i = 0$
         \WHILE {$r \neq 0$}
             \STATE $r = r * 10$
             \STATE $digit[i] = \lfloor\frac{r}{q}\rfloor$
-            \STATE $r = r \% q$
+            \STATE $r = r \mod q$
             \IF {$seen[r] \neq -1$}
                 \STATE \COMMENT {The cycle starts at $seen[r]$ and ends at $i$}
                 \STATE \em{break} % TODO Make bold
@@ -264,7 +237,7 @@ expansion.
 \end{algorithm}
 
        
-If the decimal expansion is finite (e.g. we get rest zero in the division), the
+\noindent{If} the decimal expansion is finite (e.g. we get rest zero in the division), the
 repeating cycle has length one and contains a single zero. Otherwise, we print
 the decimal expansion. In the KATTIS problem, we don't want to print any more
 than $50$ digits. If the cycle ends after more than $50$ digits (from the
@@ -279,35 +252,25 @@ The Stern-Brocot number system is an elegant way to express all fractions
 $\frac{p}{q}$ where $p$ and $q$ are relatively prime. In this problem, we want
 to find the path from the root of the tree to a fraction $\frac{p'}{q'}$, given
 $p'$ and $q'$. 
-
-We call the current node $C$. We start our path in the root node with $C =
+\\\\
+\noindent{We} call the current node $C$. We start our path in the root node with $C =
 C_{p}/C_{q}, C_{p} = 1, C_{q} = 1$. Let us also call the target node $T =
 T_{p}/T_{q}$. If $T > C$, we go right, otherwise we go left. When changing the
 current node, we let $C = C + L$ if we went left, and $C = C + R$ if we went
 right. $L$ and $R$ are pointers to the two adjacent nodes, initially set to
-$\frac{0}{1}$ and $\frac{1}{0}$.
+$\frac{0}{1}$ and $\frac{1}{0}$. Note that we change the $L$ and $R$ pointer when switching nodes.
 
 % TODO
 %Parent_l = a/b
 %Parent_r = c/d
 %Child = (a+c)/(b+d)
 
-$Parent_{left} = \frac{a}{b}$
-
-$Parent_{right} = \frac{c}{d}$
-
-$Child = \frac{a+c}{b+d}$
-
-
-To find the path to a node we simply have to check if the current node is
-bigger or smaller than our target node. The current node is always the child of
-the two parents. In the beginning the left parent will be $\frac{0}{1}$ and the
-right parent $\frac{1}{0}$. In algorithm \ref{lst:sternbrocot} we use a simple
-structure, fraction, which stores a fraction as its enumerator and denominator.
+\noindent{In} the algorithm we use a simple
+structure, fraction, which stores a fraction as its numerator and denominator.
 
 \begin{algorithm}
     \caption{Calculate path in the Stern Brocot number system}
-    \label{sternbrocot}
+    \label{lst:sternbrocot}
     \begin{algorithmic}
         \STATE fraction $left = \frac{0}{1}$
         \STATE fraction $right = \frac{1}{0}$
@@ -325,6 +288,7 @@ structure, fraction, which stores a fraction as its enumerator and denominator.
     \end{algorithmic}
 \end{algorithm}
 
+\noindent{One} has to be careful when implementing the comparison operator between two fractions. Note that $a/b > c/d$ ($b,d \neq 0$) is the same as $a*d > c*b$, which gives better precision.
 
 % TODO
 %fraction left(0,1)
@@ -341,22 +305,20 @@ structure, fraction, which stores a fraction as its enumerator and denominator.
 
 \section{Riemann vs. Mertens}
 
-The naive solution is to simply use trial division to factor each number from
+\noindent{The} naive solution is to simply use trial division to factor each number from
 $1$ to $1000000$, and depending on the number of factors and if there is two of
 one of them, assign the correct value. This would take far too long time, so we
 need to do something smarter.
 
-Since we need to calculate the Mobius function for all values in the range we
+\noindent{Since} we need to calculate the Mobius function for all values in the range we
 can use every prime number less than or equal to $\sqrt{1000000}$ with
 algorithm \ref{lst:primesieve}, and square it, and mark that off as a number
 that is not square free.
 
-The next step is to calculate the number of factors in each number. For each
+\noindent{The} next step is to calculate the number of factors in each number. For each
 number we can simply use trial division to remove one factor and recursively
-call the Mobius function for that value. Each recursion we multiply with $-1$,
-so the end result will be $(i-1)^n$ where n is the number of recursions, that
-is, the number of factors, which will be $1$ if even and $-1$ if odd. As
-performance will be an issue with doing this the naive way we can simply cache
+call the Mobius function for that value. As
+performance will be an issue when doing this we can simply cache
 the results, as they will be used more than once, and in order to get cleaner
 code we can add $-1$ to all primes in the beginning, when we do the prime sieve
 to calculate them.
@@ -378,20 +340,20 @@ to calculate them.
     \end{algorithmic}
 \end{algorithm}
 
-The Mertens function is easily done in $O(N)$ time, simply iterate through all
+\noindent{The} Mertens function has to be calculated in $O(N)$ time, simply iterate through all
 numbers and keep track of the value from the last iteration and add the Mobius
 value from this iteration. As each value in the Mertens function is dependant
 on the previous ones, and we know we are going to have to do a lookup more than
 once, we can simply calculate every value and save it.
 
 \section{Semi-prime H-numbers (*)}
-We want to count the number of H-semi-primes. This can be achieved in $3$ steps.
+This problem asks us to count the number of H-semi-primes within a certain range. We do this in three steps.
 
-In the first step we want to create a list of all H-prime numbers in the
+\noindent{In} the first step we want to create a list of all H-prime numbers in the
 sequence created by $4n + 1$ for any positive $n$. A H-prime is the product of
 only the unit (which is $1$) and the H-prime itself. We begin by setting all
-numbers in the range as H-primes and use a modified sieve of Eratosthenes to
-find all non H-primes and mark those in the list.
+numbers in the range as H-primes and use a modified Sieve of Eratosthenes to
+find all non-prime H-numbers and mark those in the list.
 
 % TODO korrekt?
 %    for i in range(5, sqrt(LIMIT), 4):
@@ -417,9 +379,10 @@ find all non H-primes and mark those in the list.
     \end{algorithmic}
 \end{algorithm}
 
-In the next step we take a H-prime number from the previous list we created. We
+\noindent{In} the next step we take a H-prime number from the previous list we created. We
 then take another H-prime number which is the same or larger and calculate the
-product of those. The product of those are a semi-prime H-number.
+product of those. The product of those are a semi-prime H-number. This way, we generate 
+all possible semi-prime H-numbers.
 
 % TODO is it correct?
 %    for i in range(5, sqrt(LIMIT), 4):
@@ -442,32 +405,7 @@ product of those. The product of those are a semi-prime H-number.
     \end{algorithmic}
 \end{algorithm}
 
-What remains to be done is to count every semi-prime H-number.
-
-% TODO Is it correct?
-%    result = []
-%    count = 0
-%    for i in range(5, LIMIT, 4):
-%        if i is semi-prime:
-%            count += 1
-%        result[i] = count
-\begin{algorithm}
-    \caption{Count semi-prime H-numbers}
-    \label{Count semi-prime H-numbers}
-    \begin{algorithmic}
-        \STATE $result = []$
-        \STATE $count = 0$
-        \STATE $i = 5$
-        \WHILE{$i \le LIMIT$}
-            \IF{$i$ is semi-prime}
-                \STATE $count = count + 1$
-            \ENDIF
-            \STATE $i = i + 4$
-        \ENDWHILE
-    \end{algorithmic}
-\end{algorithm}
-
-The result list now contains the answer for every valid input.
+\noindent{What} remains to be done is to count the semi-prime H-numbers. After doing this, one can get the answer from the counting array.
 
 % TODO fix links everywhere, but how?
 
