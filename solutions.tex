@@ -82,16 +82,16 @@ given number.
 Let us define a function $n(N)$ that denotes the number of prime factors in the
 factorization of a number $N$. Then
 
-$n(N!) = n(2 * 3 * … * (N-1) * (N)) = n(2) + n(3) + … + n(N-1) + n(N)$
+$n(N!) = n(2 * 3 * ... * (N-1) * (N)) = n(2) + n(3) + ... + n(N-1) + n(N)$
 
 \begin{algorithm}
     \caption{Sieve of Eratosthenes}
     \label{lst:primesieve}
     \begin{algorithmic}
-        \STATE prime[] \COMMENT{A boolean list with size N, all set to true}
+        \STATE prime[] \COMMENT{A boolean list with size N, all set to \textbf{true}}
         \FOR{$i = 2 \to N$}
             \FOR{$j = 2 \to N/i$}
-                \STATE $prime[i*j] = FALSE$
+                \STATE $prime[i*j] = \textbf{false}$
             \ENDFOR
         \ENDFOR
     \end{algorithmic}
