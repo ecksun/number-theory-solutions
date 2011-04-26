@@ -67,18 +67,21 @@ Scribe(s): \fskribent
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 \lecture{2011-04-14}{9}{Number Theory}{Joel Bohman, Linus Wallgren, Oskar Werkelin Ahlin}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1) FACTORIAL FACTORS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Factorial Factors}
+
 In this problem, we want to find the maximum number of factors that can be
-multiplied together to produce $N!$, given a number $N$.
-The maximum number of such factors is found in the prime factorization of the
-number. Finding such a factorization for a number can easily be done using
-trial division. But in this case, we want to find it for the factorial of the
-given number.
-Let us define a function $n(N)$ that denotes the number of prime factors in the
-factorization of a number $N$. Then
+multiplied together to produce $N!$, given a number $N$.  The maximum number of
+such factors is found in the prime factorization of the number. Finding such a
+factorization for a number can easily be done using trial division. But in this
+case, we want to find it for the factorial of the given number.  Let us define
+a function $n(N)$ that denotes the number of prime factors in the factorization
+of a number $N$. Then
 \\\\
 $n(N!) = n(2 \cdot 3 \cdot ... \cdot (N-1) \cdot (N)) = n(2) + n(3) + ... + n(N-1) + n(N)$
 \\
@@ -95,12 +98,12 @@ $n(N!) = n(2 \cdot 3 \cdot ... \cdot (N-1) \cdot (N)) = n(2) + n(3) + ... + n(N-
     \end{algorithmic}
 \end{algorithm}
             
-\noindent{Use} the Sieve of Eratosthenes (Algorithm \ref{lst:primesieve}) to generate all
-primes in the range, and save these in a list. To calculate $n(x)$, we try
-dividing $x$ by the primes in our list. When we find such a number $d$, we
-return $n(x/d) + n(d)$. The base case in the recursion is when it is called
-with a prime number. In this case, return 1.  This can be checked in constant
-time with the table used in the sieve.
+\noindent{Use} the Sieve of Eratosthenes (Algorithm \ref{lst:primesieve}) to
+generate all primes in the range, and save these in a list. To calculate
+$n(x)$, we try dividing $x$ by the primes in our list. When we find such a
+number $d$, we return $n(x/d) + n(d)$. The base case in the recursion is when
+it is called with a prime number. In this case, return 1.  This can be checked
+in constant time with the table used in the sieve.
 
 % TODO correct?
 %n(x):
@@ -126,11 +129,10 @@ time with the table used in the sieve.
     \end{algorithmic}
 \end{algorithm}
     
-
-\noindent{Before} returning the number of factors in a number, we save it in a table, to
-avoid doing the same job more than once. To get the final answer, we just have
-to go through the range from $2$ to $10^6$ (which is the maximum value in the
-KATTIS problem), and add up the number of factors, like this:
+\noindent{Before} returning the number of factors in a number, we save it in a
+table, to avoid doing the same job more than once. To get the final answer, we
+just have to go through the range from $2$ to $10^6$ (which is the maximum
+value in the KATTIS problem), and add up the number of factors, like this:
 
 % TODO correct?
 %count[i] = 0 for all i
@@ -149,6 +151,11 @@ KATTIS problem), and add up the number of factors, like this:
 \end{algorithm}
 
 \noindent{The} answer for a number $x$ is now found in $count[x]$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2) JACKPOT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Jackpot}
 
 The problem statement asks us to find the jackpot periodicity $P$ of an entire
@@ -156,9 +163,9 @@ machine, given the jackpot periodicities $p_{1},p_{2},...,p_{n}$ for the
 individual wheels in the machine. The answer is the smallest integer P such
 that $p_{i}$ divides P, for all $i \in {1,2,...,n}$.
 \\\\
-\noindent{This} integer is found by computing the least common multiple of integers
-$p_{1},p_{2},...,p_{n}$. LCM can be computed using an implementation of GCD
-(algorithm \ref{lst:LCM}), in the following way:
+\noindent{This} integer is found by computing the least common multiple of
+integers $p_{1},p_{2},...,p_{n}$. LCM can be computed using an implementation
+of GCD (algorithm \ref{lst:LCM}), in the following way:
 
 \begin{algorithm}
     \caption{LCM - Least common multiplier}
@@ -169,38 +176,38 @@ $p_{1},p_{2},...,p_{n}$. LCM can be computed using an implementation of GCD
     \end{algorithmic}
 \end{algorithm}
 
-% TODO
-%| a * b | / GCD(a, b)
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 3) REPEATING DECIMALS *
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Repeating Decimals (*)}
 
 In this problem, we want to find the repeating decimal cycle of a rational
-number $\frac{p}{q}$, given integers $p$ and $q$. None of these will exceed $3000$, and
-they will be positive. We want to print the number in its decimal notation,
-placing the repeating decimals inside parentheses. We also want to count the
-number of decimals inside the repeating cycle.
+number $\frac{p}{q}$, given integers $p$ and $q$. None of these will exceed
+$3000$, and they will be positive. We want to print the number in its decimal
+notation, placing the repeating decimals inside parentheses. We also want to
+count the number of decimals inside the repeating cycle.
 \\\\
 \noindent{The} left-most part of the decimal mark is found in
-$\lfloor{\frac{p}{q}}\rfloor$. From this division, we get a rest. Let us call
-the rest $r$, and give it the value $p \mod q$. To get the decimal expansion,
+$\lfloor{\frac{p}{q}}\rfloor$. From this division, we get a remainder. Let us call
+the remainder $r$, and give it the value $p \mod q$. To get the decimal expansion,
 we let $r = r \cdot 10$. Now the first digit after the decimal mark is found in
 $\lfloor{\frac{r}{q}}\rfloor$. This procedure will repeat until we get the same
-rest that we got in a previous step. It is clear that when this happens, we
+remainder that we got in a previous step. It is clear that when this happens, we
 will get an infinite loop of the same cycle.
 \\\\
-\noindent{We} need an efficient way to store the rests we had and where they appeared. The
-maximum number of different rests is limited to the maximum possible value of
-$q$ (since the rests are calculated $\mod q$). This means that there is a
-maximum of $3000$ rests for a number. Use an integer array to map a rest to its
-first occurrence in the decimal expansion, and let all unseen rests have value
-$-1$.  Let us also use the array $digit[]$ to save the actual digits in the
-expansion.
+\noindent{We} need an efficient way to store the remainders we had and where they
+appeared. The maximum number of different remainders is limited to the maximum
+possible value of $q$ (since the remainders are calculated $\mod q$). This means
+that there is a maximum of $3000$ remainders for a number. Use an integer array to
+map a remainder to its first occurrence in the decimal expansion, and let all unseen
+remainders have value $-1$.  Let us also use the array $digit[]$ to save the actual
+digits in the expansion.
 
 % TODO
 %init seen[] to -1
 %r = p % q
-%seen[r] = 0 // first rest seen at index 0
+%seen[r] = 0 // first remainder seen at index 0
 %set i = 0
 %while (true)
 %    if (r == 0)
@@ -220,7 +227,7 @@ expansion.
     \begin{algorithmic}
         \STATE Initialize $seen[]$ to $-1$
         \STATE $r = p \mod q$
-        \STATE $seen[r] = 0$ \COMMENT{First rest seen at index 0}
+        \STATE $seen[r] = 0$ \COMMENT{First remainder seen at index 0}
         \STATE $i = 0$
         \WHILE {$r \neq 0$}
             \STATE $r = r \cdot 10$
@@ -237,15 +244,19 @@ expansion.
 \end{algorithm}
 
        
-\noindent{If} the decimal expansion is finite (e.g. we get rest zero in the division), the
-repeating cycle has length one and contains a single zero. Otherwise, we print
-the decimal expansion. In the KATTIS problem, we don't want to print any more
-than $50$ digits. If the cycle ends after more than $50$ digits (from the
-decimal mark, not the start of the cycle) we print "..." and end it with a
-right parenthesis. The number of decimals in the cycle is $1$ in the case of
-$r==0$, otherwise it is found in the difference between the end and starting
-point of the cycle, as seen in the pseudo code above.
+\noindent{If} the decimal expansion is finite (e.g. we get remainder zero in the
+division), the repeating cycle has length one and contains a single zero.
+Otherwise, we print the decimal expansion. In the KATTIS problem, we don't want
+to print any more than $50$ digits. If the cycle ends after more than $50$
+digits (from the decimal mark, not the start of the cycle) we print "..." and
+end it with a right parenthesis. The number of decimals in the cycle is $1$ in
+the case of $r==0$, otherwise it is found in the difference between the end and
+starting point of the cycle, as seen in the pseudo code above.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 4) THE STERN-BROCOT NUMBER SYSTEM
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Stern-Brocot Number System}
 
 The Stern-Brocot number system is an elegant way to express all fractions
@@ -253,20 +264,21 @@ $\frac{p}{q}$ where $p$ and $q$ are relatively prime. In this problem, we want
 to find the path from the root of the tree to a fraction $\frac{p'}{q'}$, given
 $p'$ and $q'$. 
 \\\\
-\noindent{We} call the current node $C$. We start our path in the root node with $C =
-C_{p}/C_{q}, C_{p} = 1, C_{q} = 1$. Let us also call the target node $T =
-T_{p}/T_{q}$. If $T > C$, we go right, otherwise we go left. When changing the
-current node, we let $C = C + L$ if we went left, and $C = C + R$ if we went
-right. $L$ and $R$ are pointers to the two adjacent nodes, initially set to
-$\frac{0}{1}$ and $\frac{1}{0}$. Note that we change the $L$ and $R$ pointer when switching nodes.
+\noindent{We} call the current node $C$. We start our path in the root node
+with $C = C_{p}/C_{q}, C_{p} = 1, C_{q} = 1$. Let us also call the target node
+$T = T_{p}/T_{q}$. If $T > C$, we go right, otherwise we go left. When changing
+the current node, we let $C = C + L$ if we went left, and $C = C + R$ if we
+went right. $L$ and $R$ are pointers to the two adjacent nodes, initially set
+to $\frac{0}{1}$ and $\frac{1}{0}$. Note that we change the $L$ and $R$ pointer
+when switching nodes.
 
 % TODO
 %Parent_l = a/b
 %Parent_r = c/d
 %Child = (a+c)/(b+d)
 
-\noindent{In} the algorithm we use a simple
-structure, fraction, which stores a fraction as its numerator and denominator.
+\noindent{In} the algorithm we use a simple structure, fraction, which stores a
+fraction as its numerator and denominator.
 
 \begin{algorithm}
     \caption{Calculate path in the Stern Brocot number system}
@@ -288,8 +300,9 @@ structure, fraction, which stores a fraction as its numerator and denominator.
     \end{algorithmic}
 \end{algorithm}
 
-\noindent{One} has to be careful when implementing the comparison operator between two fractions. 
-Note that $a/b > c/d$ ($b,d \neq 0$) is the same as $a \cdot d > c \cdot b$, which gives better precision.
+\noindent{One} has to be careful when implementing the comparison operator
+between two fractions.  Note that $a/b > c/d$ ($b,d \neq 0$) is the same as $a
+\cdot d > c \cdot b$, which gives better precision.
 
 % TODO
 %fraction left(0,1)
@@ -304,25 +317,28 @@ Note that $a/b > c/d$ ($b,d \neq 0$) is the same as $a \cdot d > c \cdot b$, whi
 %            print “L”
 %        current = frac(left, right) // Generate a new node.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 5) RIEMANN VS MERTENS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Riemann vs. Mertens}
 
-\noindent{The} naive solution is to simply use trial division to factor each number from
-$1$ to $1000000$, and depending on the number of factors and if there is two of
-one of them, assign the correct value. This would take far too long time, so we
-need to do something smarter.
+\noindent{The} naive solution is to simply use trial division to factor each
+number from $1$ to $1000000$, and depending on the number of factors and if
+there is two of one of them, assign the correct value. This would take far too
+long time, so we need to do something smarter.
 
-\noindent{Since} we need to calculate the Mobius function for all values in the range we
-can use every prime number less than or equal to $\sqrt{1000000}$ with
+\noindent{Since} we need to calculate the Mobius function for all values in the
+range we can use every prime number less than or equal to $\sqrt{1000000}$ with
 algorithm \ref{lst:primesieve}, and square it, and mark that off as a number
 that is not square free.
 
-\noindent{The} next step is to calculate the number of factors in each number. For each
-number we can simply use trial division to remove one factor and recursively
-call the Mobius function for that value. As
-performance will be an issue when doing this we can simply cache
-the results, as they will be used more than once, and in order to get cleaner
-code we can add $-1$ to all primes in the beginning, when we do the prime sieve
-to calculate them.
+\noindent{The} next step is to calculate the number of factors in each number.
+For each number we can simply use trial division to remove one factor and
+recursively call the Mobius function for that value. As performance will be an
+issue when doing this we can simply cache the results, as they will be used
+more than once, and in order to get cleaner code we can add $-1$ to all primes
+in the beginning, when we do the prime sieve to calculate them.
 
 \begin{algorithm}
     \label{mobius}
@@ -341,20 +357,26 @@ to calculate them.
     \end{algorithmic}
 \end{algorithm}
 
-\noindent{The} Mertens function has to be calculated in $O(N)$ time, simply iterate through all
-numbers and keep track of the value from the last iteration and add the Mobius
-value from this iteration. As each value in the Mertens function is dependant
-on the previous ones, and we know we are going to have to do a lookup more than
-once, we can simply calculate every value and save it.
+\noindent{The} Mertens function has to be calculated in $O(N)$ time, simply
+iterate through all numbers and keep track of the value from the last iteration
+and add the Mobius value from this iteration. As each value in the Mertens
+function is dependant on the previous ones, and we know we are going to have to
+do a lookup more than once, we can simply calculate every value and save it.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 6) SEMI-PRIME H-NUMBERS *
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Semi-prime H-numbers (*)}
-This problem asks us to count the number of H-semi-primes within a certain range. We do this in three steps.
 
-\noindent{In} the first step we want to create a list of all H-prime numbers in the
-sequence created by $4n + 1$ for any positive $n$. An H-prime is the product of
-only the unit (which is $1$) and the H-prime itself. We begin by setting all
-numbers in the range as H-primes and use a modified Sieve of Eratosthenes to
-find all non-prime H-numbers and mark those in the list.
+This problem asks us to count the number of H-semi-primes within a certain 
+range. We do this in three steps.
+
+\noindent{In} the first step we want to create a list of all H-prime numbers in
+the sequence created by $4n + 1$ for any positive $n$. An H-prime is the
+product of only the unit (which is $1$) and the H-prime itself. We begin by
+setting all numbers in the range as H-primes and use a modified Sieve of
+Eratosthenes to find all non-prime H-numbers and mark those in the list.
 
 \begin{algorithm}
     \caption{H-prime sieve}
@@ -374,10 +396,10 @@ find all non-prime H-numbers and mark those in the list.
     \end{algorithmic}
 \end{algorithm}
 
-\noindent{In} the next step we take an H-prime number from the previous list we created. We
-then take another H-prime number which is the same or larger and calculate the
-product of those. The product of those are a semi-prime H-number. This way, we generate 
-all possible semi-prime H-numbers.
+\noindent{In} the next step we take an H-prime number from the previous list we
+created. We then take another H-prime number which is the same or larger and
+calculate the product of those. The product of those are a semi-prime H-number.
+This way, we generate all possible semi-prime H-numbers.
 
 \begin{algorithm}
     \caption{Calculate semi-prime H-numbers}
@@ -391,7 +413,8 @@ all possible semi-prime H-numbers.
     \end{algorithmic}
 \end{algorithm}
 
-\noindent{What} remains to be done is to count the semi-prime H-numbers. After doing this, one can get the answer from the counting array.
+\noindent{What} remains to be done is to count the semi-prime H-numbers. After
+doing this, one can get the answer from the counting array.
 
 % TODO fix links everywhere, but how?
 
