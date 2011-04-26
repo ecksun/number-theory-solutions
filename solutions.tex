@@ -80,7 +80,7 @@ given number.
 Let us define a function $n(N)$ that denotes the number of prime factors in the
 factorization of a number $N$. Then
 \\\\
-$n(N!) = n(2 * 3 * ... * (N-1) * (N)) = n(2) + n(3) + ... + n(N-1) + n(N)$
+$n(N!) = n(2 \cdot 3 \cdot ... \cdot (N-1) \cdot (N)) = n(2) + n(3) + ... + n(N-1) + n(N)$
 \\
 \begin{algorithm}
     \caption{Sieve of Eratosthenes}
@@ -89,7 +89,7 @@ $n(N!) = n(2 * 3 * ... * (N-1) * (N)) = n(2) + n(3) + ... + n(N-1) + n(N)$
         \STATE prime[] \COMMENT{A boolean list with size N, all set to \textbf{true}}
         \FOR{$i = 2 \to N$}
             \FOR{$j = 2 \to N/i$}
-                \STATE $prime[i*j] = \textbf{false}$
+                \STATE $prime[i \cdot j] = \textbf{false}$
             \ENDFOR
         \ENDFOR
     \end{algorithmic}
@@ -165,7 +165,7 @@ $p_{1},p_{2},...,p_{n}$. LCM can be computed using an implementation of GCD
     \label{lst:LCM}
     \begin{algorithmic}
         \REQUIRE Input: $a$, $b$
-        \RETURN $ \frac{a}{gcd(a, b)}*b$
+        \RETURN $ \frac{a}{gcd(a, b)} \cdot b$
     \end{algorithmic}
 \end{algorithm}
 
@@ -184,7 +184,7 @@ number of decimals inside the repeating cycle.
 \noindent{The} left-most part of the decimal mark is found in
 $\lfloor{\frac{p}{q}}\rfloor$. From this division, we get a rest. Let us call
 the rest $r$, and give it the value $p \mod q$. To get the decimal expansion,
-we let $r = r * 10$. Now the first digit after the decimal mark is found in
+we let $r = r \cdot 10$. Now the first digit after the decimal mark is found in
 $\lfloor{\frac{r}{q}}\rfloor$. This procedure will repeat until we get the same
 rest that we got in a previous step. It is clear that when this happens, we
 will get an infinite loop of the same cycle.
@@ -223,7 +223,7 @@ expansion.
         \STATE $seen[r] = 0$ \COMMENT{First rest seen at index 0}
         \STATE $i = 0$
         \WHILE {$r \neq 0$}
-            \STATE $r = r * 10$
+            \STATE $r = r \cdot 10$
             \STATE $digit[i] = \lfloor\frac{r}{q}\rfloor$
             \STATE $r = r \mod q$
             \IF {$seen[r] \neq -1$}
@@ -288,7 +288,8 @@ structure, fraction, which stores a fraction as its numerator and denominator.
     \end{algorithmic}
 \end{algorithm}
 
-\noindent{One} has to be careful when implementing the comparison operator between two fractions. Note that $a/b > c/d$ ($b,d \neq 0$) is the same as $a*d > c*b$, which gives better precision.
+\noindent{One} has to be careful when implementing the comparison operator between two fractions. 
+Note that $a/b > c/d$ ($b,d \neq 0$) is the same as $a \cdot d > c \cdot b$, which gives better precision.
 
 % TODO
 %fraction left(0,1)
@@ -350,16 +351,10 @@ once, we can simply calculate every value and save it.
 This problem asks us to count the number of H-semi-primes within a certain range. We do this in three steps.
 
 \noindent{In} the first step we want to create a list of all H-prime numbers in the
-sequence created by $4n + 1$ for any positive $n$. A H-prime is the product of
+sequence created by $4n + 1$ for any positive $n$. An H-prime is the product of
 only the unit (which is $1$) and the H-prime itself. We begin by setting all
 numbers in the range as H-primes and use a modified Sieve of Eratosthenes to
 find all non-prime H-numbers and mark those in the list.
-
-% TODO korrekt?
-%    for i in range(5, sqrt(LIMIT), 4):
-%        if i is H-prime:
-%            for j in range(i * i, LIMIT, i):
-%                j is not H-prime
 
 \begin{algorithm}
     \caption{H-prime sieve}
@@ -368,7 +363,7 @@ find all non-prime H-numbers and mark those in the list.
         \STATE $i = 5$
         \WHILE{$i \le \sqrt{LIMIT}$}
             \IF{$i$ is H-prime}
-                \STATE $j = i*i$
+                \STATE $j = i \cdot i$
                 \WHILE{$j \le LIMIT$}
                     \STATE $j$ is not H-prime % TODO det här ser fel ut
                     \STATE $j = j + i$
@@ -379,27 +374,18 @@ find all non-prime H-numbers and mark those in the list.
     \end{algorithmic}
 \end{algorithm}
 
-\noindent{In} the next step we take a H-prime number from the previous list we created. We
+\noindent{In} the next step we take an H-prime number from the previous list we created. We
 then take another H-prime number which is the same or larger and calculate the
 product of those. The product of those are a semi-prime H-number. This way, we generate 
 all possible semi-prime H-numbers.
 
-% TODO is it correct?
-%    for i in range(5, sqrt(LIMIT), 4):
-%        if i is H-prime:
-%            for j in range(i, LIMIT):
-%                if i * j >= LIMIT:
-%                    break;
-%
-%                if j is H-prime:
-%                    i * j is semi-prime
 \begin{algorithm}
     \caption{Calculate semi-prime H-numbers}
     \label{Semi-prime H-numbers}
     \begin{algorithmic}
         \FOR{all H-primes $i$}
             \FOR{all H-primes $j \ge i$}
-                \STATE $i * j$ is semi-prime
+                \STATE $i \cdot j$ is semi-prime
             \ENDFOR
         \ENDFOR
     \end{algorithmic}
