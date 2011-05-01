@@ -91,9 +91,11 @@ $n(N!) = n(2 \cdot 3 \cdot ... \cdot (N-1) \cdot (N)) = n(2) + n(3) + ... + n(N-
     \begin{algorithmic}
         \STATE prime[] \COMMENT{A boolean list with size N, all set to \textbf{true}}
         \FOR{$i = 2 \to N$}
-            \FOR{$j = 2 \to N/i$}
-                \STATE $prime[i \cdot j] = \textbf{false}$
-            \ENDFOR
+            \IF{$prime[i] = true$}
+                \FOR{$j = 2 \to N/i$}
+                    \STATE $prime[i \cdot j] = \textbf{false}$
+                \ENDFOR
+            \ENDIF
         \ENDFOR
     \end{algorithmic}
 \end{algorithm}
@@ -131,8 +133,9 @@ in constant time with the table used in the sieve.
     
 \noindent{Before} returning the number of factors in a number, we save it in a
 table, to avoid doing the same job more than once. To get the final answer, we
-just have to go through the range from $2$ to $10^6$ (which is the maximum
-value in the KATTIS problem), and add up the number of factors, like this:
+just have to go through the range from $2$ to $10^6$ with an $O(n)$ algorithm
+(which is the maximum value in the KATTIS problem), and add up the number of
+factors, like this:
 
 % TODO correct?
 %count[i] = 0 for all i
@@ -175,6 +178,30 @@ of GCD (algorithm \ref{lst:LCM}), in the following way:
         \RETURN $ \frac{a}{gcd(a, b)} \cdot b$
     \end{algorithmic}
 \end{algorithm}
+
+When we want to calculate the least common multiplier of several numbers we can
+use the fact that $LCM(a, b, c) = LCM(LCM(a, b), c)$. Because of this property
+we can calculate the LCM of the current periodicity and the comulative
+periodicity of all previous wheels, and do so until either the comulative
+periodicity is larger than $10^9$ or we have calculated the periodicity of the
+entire machine.
+
+\begin{algorithm}
+    \caption{Jackpot}
+    \label{lst:jackpot}
+    \begin{algorithmic}
+        \REQURE Input: wheels[] \COMMENT{Wheel periodicity}
+        \STATE r = 1
+        \FOR{each periodicity $p$ in $wheels$}
+            \STATE $r = LCM(r, p)$
+            \IF $r > 10^9$
+                \PRINT More than a billion.
+            \ENDIF
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -304,6 +331,9 @@ fraction as its numerator and denominator.
 between two fractions.  Note that $a/b > c/d$ ($b,d \neq 0$) is the same as $a
 \cdot d > c \cdot b$, which gives better precision.
 
+As the algorithm simply walks down a binary tree the time complexity is
+$O(\log(N))$, where $N$ is the number of nodes in the tree.
+
 % TODO
 %fraction left(0,1)
 %fraction right(1,0)
@@ -380,7 +410,7 @@ Eratosthenes to find all non-prime H-numbers and mark those in the list.
 
 \begin{algorithm}
     \caption{H-prime sieve}
-    \label{H-prime sieve}
+    \label{lst:hsieve}
     \begin{algorithmic}
         \STATE $i = 5$
         \WHILE{$i \le \sqrt{LIMIT}$}
@@ -415,6 +445,12 @@ This way, we generate all possible semi-prime H-numbers.
 
 \noindent{What} remains to be done is to count the semi-prime H-numbers. After
 doing this, one can get the answer from the counting array.
+
+The complexity of our naive H-prime sieve (algorithm \ref{lst:hsieve}) is
+$O(N^2)$. To calculate the semi-prime H-numbers we need to go through all
+H-primes, which is $O(P^2)$ where P is the number of primes. And lastly, to
+count the H-primes is linear, $O(N)$. The complexity of this entire algorithm
+is therefor $O(N^2 + P^2 + N) = O(N^2)$
 
 % TODO fix links everywhere, but how?
 
