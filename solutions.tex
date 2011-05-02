@@ -158,9 +158,13 @@ factors, like this:
 The sieve has time complexity $\mathcal{O}(N\log{\log{N}})$. The number of
 primes $\le \sqrt{N}$ is $\mathcal{O}(\sqrt{N})$ and thus reducing a number to
 its prime factors using trial division (as we do) is $\mathcal{O}(\sqrt{N})$.
-The precomputation step would, without any caching, generate a time complexity of
-$\mathcal{O}(\sum_{k=2}^{10^{6}}\sqrt{k}) = O((\sqrt{N})^2) = O(N)$. As we save computed results in a
-table, we get the number of factors in constant time as soon as we hit a precomputed number (or a prime). The probability that this happens is high, since half of the numbers will divide 2, a third of the numbers will divide 3, etc. Thus, we say that the solution is roughly linear in terms of the largest number, without giving a precise analysis.
+The precomputation step would, without any caching, generate a time complexity
+of $\mathcal{O}(\sum_{k=2}^{10^{6}}\sqrt{k}) = O((\sqrt{N})^2) = O(N)$. As we
+save computed results in a table, we get the number of factors in constant time
+as soon as we hit a precomputed number (or a prime). The probability that this
+happens is high, since half of the numbers will divide 2, a third of the
+numbers will divide 3, etc. Thus, we say that the solution is roughly linear in
+terms of the largest number, without giving a precise analysis.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2) JACKPOT
@@ -401,11 +405,21 @@ in the beginning, when we do the prime sieve to calculate them.
     \end{algorithmic}
 \end{algorithm}
 
-\noindent{The} Mertens function has to be calculated in $O(N)$ time, simply
-iterate through all numbers and keep track of the value from the last iteration
-and add the Mobius value from this iteration. As each value in the Mertens
-function is dependant on the previous ones, and we know we are going to have to
-do a lookup more than once, we can simply calculate every value and save it.
+\subsection{Time Complexity}
+\noindent{There} are two parts to the complexity of the Mobius function,
+finding the prime factors and the number of prime factors. The maximum number
+of prime factors in a number is $\log(N)$, when all factors are the smallest
+prime, 2. The worst-case for finding the factors is to having to iterate
+through all primes, $P$. This would give a time complexity of $O(\log(N)*P)$,
+note however that it is not $\Theta(\log(N)*P)$ as the two parts of the
+complexity is inversly related.
+
+Once we have calculated the Mobius function we can calculate the Mertens
+function in linear, $O(N)$, time. Simply iterate through all numbers and keep
+track of the value from the last iteration and add the Mobius value from this
+iteration. As each value in the Mertens function is dependant on the previous
+ones, and we know we are going to have to do a lookup more than once, we can
+simply calculate every value and save it.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -461,10 +475,9 @@ This way, we generate all possible semi-prime H-numbers.
 doing this, one can get the answer from the counting array.
 
 The complexity of the H-prime sieve (algorithm \ref{lst:hsieve}) is
-$O(N\log{\log{N}})$. Iterating over all pairs of H-primes is $O(P^2)$ where $P$ is the number of primes. And lastly, to
-count the H-primes is linear, $O(N)$. The complexity of this entire algorithm
-is $O(N\log{\log{N}} + P^2)$
-
-% TODO fix links everywhere, but how?
+$O(N\log{\log{N}})$. Iterating over all pairs of H-primes is $O(P^2)$ where $P$
+is the number of primes. And lastly, to count the H-primes is linear, $O(N)$.
+The complexity of this entire algorithm is $O(N\log{\log{N}} + P^2 + N) =
+O(N\log{\log{N}} + P^2)$
 
 \end{document}
