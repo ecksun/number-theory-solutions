@@ -158,13 +158,9 @@ factors, like this:
 The sieve has time complexity $\mathcal{O}(N\log{\log{N}})$. The number of
 primes $\le \sqrt{N}$ is $\mathcal{O}(\sqrt{N})$ and thus reducing a number to
 its prime factors using trial division (as we do) is $\mathcal{O}(\sqrt{N})$.
-The precomputation step would generate a time complexity of
-$\mathcal{O}(\sum_{k=2}^{10^{6}}\sqrt{k}) = O((\sqrt{k})^2) = O(k)$. The
-practical time complexity is much better, as we save computed results in a
-table. For large numbers, the algorithm will finish in constant time. For large
-non-prime numbers, say $10^6$, the prime factors will quickly be detected, and
-the number will efficiently be reduced to a much smaller number, for which the
-probability that we have a precalculated value for it is high.
+The precomputation step would, without any caching, generate a time complexity of
+$\mathcal{O}(\sum_{k=2}^{10^{6}}\sqrt{k}) = O((\sqrt{N})^2) = O(N)$. As we save computed results in a
+table, we get the number of factors in constant time as soon as we hit a precomputed number (or a prime). The probability that this happens is high, since half of the numbers will divide 2, a third of the numbers will divide 3, etc. Thus, we say that the solution is roughly linear in terms of the largest number, without giving a precise analysis.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2) JACKPOT
@@ -464,11 +460,10 @@ This way, we generate all possible semi-prime H-numbers.
 \noindent{What} remains to be done is to count the semi-prime H-numbers. After
 doing this, one can get the answer from the counting array.
 
-The complexity of our naive H-prime sieve (algorithm \ref{lst:hsieve}) is
-$O(N^2)$. To calculate the semi-prime H-numbers we need to go through all
-H-primes, which is $O(P^2)$ where P is the number of primes. And lastly, to
+The complexity of the H-prime sieve (algorithm \ref{lst:hsieve}) is
+$O(N\log{\log{N}})$. Iterating over all pairs of H-primes is $O(P^2)$ where $P$ is the number of primes. And lastly, to
 count the H-primes is linear, $O(N)$. The complexity of this entire algorithm
-is therefor $O(N^2 + P^2 + N) = O(N^2)$
+is $O(N\log{\log{N}} + P^2)$
 
 % TODO fix links everywhere, but how?
 
