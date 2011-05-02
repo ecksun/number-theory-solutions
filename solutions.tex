@@ -123,7 +123,7 @@ in constant time with the table used in the sieve.
         \IF{$x$ is prime}
             \RETURN $1$
         \ENDIF
-        \FOR{prime $p \le N$}
+        \FOR{prime $p \le \sqrt{N}$}
             \IF{$p | x$}
                 \RETURN $n(x/p) + 1$
             \ENDIF
@@ -133,7 +133,7 @@ in constant time with the table used in the sieve.
     
 \noindent{Before} returning the number of factors in a number, we save it in a
 table, to avoid doing the same job more than once. To get the final answer, we
-just have to go through the range from $2$ to $10^6$ with an $O(n)$ algorithm
+just have to go through the range from $2$ to $10^6$
 (which is the maximum value in the KATTIS problem), and add up the number of
 factors, like this:
 
@@ -153,8 +153,9 @@ factors, like this:
     \end{algorithmic}
 \end{algorithm}
 
-\noindent{The} answer for a number $x$ is now found in $count[x]$.
-
+\noindent{The} answer for a number $x$ is now found in $count[x]$. 
+\subsection{Time complexity}
+The sieve has time complexity $\mathcal{O}(N\log{\log{N}})$. The number of primes $\le \sqrt{N}$ is $\mathcal{O}(\sqrt{N})$ and thus reducing a number to its prime factors using trial division (as we do) is $\mathcal{O}(\sqrt{N})$. The precomputation step would generate a time complexity of $\mathcal{O}(\sum_{k=2}^{10^{6}}\sqrt{k})$. The practical time complexity is much better, as we keep values for the numbers in a table. For large numbers, the algorithm will execute in constant time. For large non-prime numbers, say $10^6$, the prime factors will quickly be detected, and the number will efficiently be reduced to a much smaller number, for which the probability that we have a precalculated value for it, is high.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2) JACKPOT
@@ -164,7 +165,8 @@ factors, like this:
 The problem statement asks us to find the jackpot periodicity $P$ of an entire
 machine, given the jackpot periodicities $p_{1},p_{2},...,p_{n}$ for the
 individual wheels in the machine. The answer is the smallest integer P such
-that $p_{i}$ divides P, for all $i \in {1,2,...,n}$.
+that $p_{i}$ divides P, for all $i \in {1,2,...,n}$. If P $> 10^{9}$, we should
+print "More than a billion.".
 \\\\
 \noindent{This} integer is found by computing the least common multiple of
 integers $p_{1},p_{2},...,p_{n}$. LCM can be computed using an implementation
@@ -181,7 +183,7 @@ of GCD (algorithm \ref{lst:LCM}), in the following way:
 
 When we want to calculate the least common multiplier of several numbers we can
 use the fact that $LCM(a, b, c) = LCM(LCM(a, b), c)$. Because of this property
-we can calculate the LCM of the current periodicity and the comulative
+we can calculate the LCM of the current periodicity and the cumulative
 periodicity of all previous wheels, and do so until either the comulative
 periodicity is larger than $10^9$ or we have calculated the periodicity of the
 entire machine.
@@ -190,19 +192,19 @@ entire machine.
     \caption{Jackpot}
     \label{lst:jackpot}
     \begin{algorithmic}
-        \REQURE Input: wheels[] \COMMENT{Wheel periodicity}
+        \REQUIRE Input: wheels[] \COMMENT{Wheel periodicity}
         \STATE r = 1
         \FOR{each periodicity $p$ in $wheels$}
             \STATE $r = LCM(r, p)$
-            \IF $r > 10^9$
+            \IF {$r > 10^9$}
                 \PRINT More than a billion.
             \ENDIF
         \ENDFOR
     \end{algorithmic}
 \end{algorithm}
 
-
-
+\subsection{Time complexity}
+The time complexity for finding the $LCM$ of two numbers $a,b$ is $\mathcal{O}(\log{max(a,b)})$. Total time complexity is $\mathcal{O}(k*log{p_i})$, where $p_i$ is the periodicity and $k$ the number of wheels.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3) REPEATING DECIMALS *
@@ -280,6 +282,11 @@ end it with a right parenthesis. The number of decimals in the cycle is $1$ in
 the case of $r==0$, otherwise it is found in the difference between the end and
 starting point of the cycle, as seen in the pseudo code above.
 
+\subsection{Time complexity}
+Let $B$ be the number of digits before the cycle starts, and $C$ the cycle length. The time 
+complexity for finding the cycle is $\mathcal{O}(B+C)$. As we are performing some slow 
+operations (like modulus), the practical performance will be a bit slower than a standard 
+linear algorithm.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4) THE STERN-BROCOT NUMBER SYSTEM
