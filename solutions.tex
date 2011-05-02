@@ -155,7 +155,16 @@ factors, like this:
 
 \noindent{The} answer for a number $x$ is now found in $count[x]$. 
 \subsection{Time complexity}
-The sieve has time complexity $\mathcal{O}(N\log{\log{N}})$. The number of primes $\le \sqrt{N}$ is $\mathcal{O}(\sqrt{N})$ and thus reducing a number to its prime factors using trial division (as we do) is $\mathcal{O}(\sqrt{N})$. The precomputation step would generate a time complexity of $\mathcal{O}(\sum_{k=2}^{10^{6}}\sqrt{k})$. The practical time complexity is much better, as we save computed results in a table. For large numbers, the algorithm will finish in constant time. For large non-prime numbers, say $10^6$, the prime factors will quickly be detected, and the number will efficiently be reduced to a much smaller number, for which the probability that we have a precalculated value for it is high.
+The sieve has time complexity $\mathcal{O}(N\log{\log{N}})$. The number of
+primes $\le \sqrt{N}$ is $\mathcal{O}(\sqrt{N})$ and thus reducing a number to
+its prime factors using trial division (as we do) is $\mathcal{O}(\sqrt{N})$.
+The precomputation step would generate a time complexity of
+$\mathcal{O}(\sum_{k=2}^{10^{6}}\sqrt{k}) = O((\sqrt{k})^2) = O(k)$. The
+practical time complexity is much better, as we save computed results in a
+table. For large numbers, the algorithm will finish in constant time. For large
+non-prime numbers, say $10^6$, the prime factors will quickly be detected, and
+the number will efficiently be reduced to a much smaller number, for which the
+probability that we have a precalculated value for it is high.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2) JACKPOT
@@ -182,8 +191,8 @@ of GCD (algorithm \ref{lst:LCM}), in the following way:
 \end{algorithm}
 
 When we want to calculate the least common multiplier of several numbers we can
-use the fact that LCM$(a, b, c) = $LCM$($LCM$(a, b), c)$. Because of this property
-we can calculate the LCM of the current periodicity and the cumulative
+use the fact that LCM$(a, b, c) = $LCM$($LCM$(a, b), c)$. Because of this
+property we can calculate the LCM of the current periodicity and the cumulative
 periodicity of all previous wheels, and do so until either the comulative
 periodicity is larger than $10^9$ or we have calculated the periodicity of the
 entire machine.
@@ -204,7 +213,9 @@ entire machine.
 \end{algorithm}
 
 \subsection{Time complexity}
-The time complexity for finding the LCM of two numbers $a,b$ is $\mathcal{O}(\log{max(a,b)})$. Total time complexity is $\mathcal{O}(k \cdot log{p_i})$, where $p_i$ is the periodicity and $k$ the number of wheels.
+The time complexity for finding the LCM of two numbers $a,b$ is
+$\mathcal{O}(\log{max(a,b)})$. Total time complexity is $\mathcal{O}(k \cdot
+log{p_i})$, where $p_i$ is the periodicity and $k$ the number of wheels.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3) REPEATING DECIMALS *
@@ -218,20 +229,20 @@ notation, placing the repeating decimals inside parentheses. We also want to
 count the number of decimals inside the repeating cycle.
 \\\\
 \noindent{The} left-most part of the decimal mark is found in
-$\lfloor{\frac{p}{q}}\rfloor$. From this division, we get a remainder. Let us call
-the remainder $r$, and give it the value $p \mod q$. To get the decimal expansion,
-we let $r = r \cdot 10$. Now the first digit after the decimal mark is found in
-$\lfloor{\frac{r}{q}}\rfloor$. This procedure will repeat until we get the same
-remainder that we got in a previous step. It is clear that when this happens, we
-will get an infinite loop of the same cycle.
+$\lfloor{\frac{p}{q}}\rfloor$. From this division, we get a remainder. Let us
+call the remainder $r$, and give it the value $p \mod q$. To get the decimal
+expansion, we let $r = r \cdot 10$. Now the first digit after the decimal mark
+is found in $\lfloor{\frac{r}{q}}\rfloor$. This procedure will repeat until we
+get the same remainder that we got in a previous step. It is clear that when
+this happens, we will get an infinite loop of the same cycle.
 \\\\
-\noindent{We} need an efficient way to store the remainders we had and where they
-appeared. The maximum number of different remainders is limited to the maximum
-possible value of $q$ (since the remainders are calculated $\mod q$). This means
-that there is a maximum of $3000$ remainders for a number. Use an integer array to
-map a remainder to its first occurrence in the decimal expansion, and let all unseen
-remainders have value $-1$.  Let us also use the array $digit[]$ to save the actual
-digits in the expansion.
+\noindent{We} need an efficient way to store the remainders we had and where
+they appeared. The maximum number of different remainders is limited to the
+maximum possible value of $q$ (since the remainders are calculated $\mod q$).
+This means that there is a maximum of $3000$ remainders for a number. Use an
+integer array to map a remainder to its first occurrence in the decimal
+expansion, and let all unseen remainders have value $-1$.  Let us also use the
+array $digit[]$ to save the actual digits in the expansion.
 
 % TODO
 %init seen[] to -1
@@ -273,8 +284,8 @@ digits in the expansion.
 \end{algorithm}
 
        
-\noindent{If} the decimal expansion is finite (e.g. we get remainder zero in the
-division), the repeating cycle has length one and contains a single zero.
+\noindent{If} the decimal expansion is finite (e.g. we get remainder zero in
+the division), the repeating cycle has length one and contains a single zero.
 Otherwise, we print the decimal expansion. In the KATTIS problem, we don't want
 to print any more than $50$ digits. If the cycle ends after more than $50$
 digits (from the decimal mark, not the start of the cycle) we print "..." and
@@ -283,10 +294,10 @@ the case of $r==0$, otherwise it is found in the difference between the end and
 starting point of the cycle, as seen in the pseudo code above.
 
 \subsection{Time complexity}
-Let $B$ be the number of digits before the cycle starts, and $C$ the cycle length. The time 
-complexity for finding the cycle is $\mathcal{O}(B+C)$. As we are performing some slow 
-operations (like modulus), the practical performance will be a bit slower than a standard 
-linear algorithm.
+Let $B$ be the number of digits before the cycle starts, and $C$ the cycle
+length. The time complexity for finding the cycle is $\mathcal{O}(B+C)$. As we
+are performing some slow operations (like modulus), the practical performance
+will be a bit slower than a standard linear algorithm.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 4) THE STERN-BROCOT NUMBER SYSTEM
@@ -339,7 +350,8 @@ between two fractions.  Note that $a/b > c/d$ ($b,d \neq 0$) is the same as $a
 \cdot d > c \cdot b$, which gives better precision.
 
 \subsection{Time complexity}
-The time complexity of the solution is $\mathcal{O}(P)$, where P is the path length.
+The time complexity of the solution is $\mathcal{O}(P)$, where P is the path
+length.
 % TODO
 %fraction left(0,1)
 %fraction right(1,0)
