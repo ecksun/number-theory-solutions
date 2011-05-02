@@ -155,7 +155,7 @@ factors, like this:
 
 \noindent{The} answer for a number $x$ is now found in $count[x]$. 
 \subsection{Time complexity}
-The sieve has time complexity $\mathcal{O}(N\log{\log{N}})$. The number of primes $\le \sqrt{N}$ is $\mathcal{O}(\sqrt{N})$ and thus reducing a number to its prime factors using trial division (as we do) is $\mathcal{O}(\sqrt{N})$. The precomputation step would generate a time complexity of $\mathcal{O}(\sum_{k=2}^{10^{6}}\sqrt{k})$. The practical time complexity is much better, as we keep values for the numbers in a table. For large numbers, the algorithm will execute in constant time. For large non-prime numbers, say $10^6$, the prime factors will quickly be detected, and the number will efficiently be reduced to a much smaller number, for which the probability that we have a precalculated value for it, is high.
+The sieve has time complexity $\mathcal{O}(N\log{\log{N}})$. The number of primes $\le \sqrt{N}$ is $\mathcal{O}(\sqrt{N})$ and thus reducing a number to its prime factors using trial division (as we do) is $\mathcal{O}(\sqrt{N})$. The precomputation step would generate a time complexity of $\mathcal{O}(\sum_{k=2}^{10^{6}}\sqrt{k})$. The practical time complexity is much better, as we save computed results in a table. For large numbers, the algorithm will finish in constant time. For large non-prime numbers, say $10^6$, the prime factors will quickly be detected, and the number will efficiently be reduced to a much smaller number, for which the probability that we have a precalculated value for it is high.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2) JACKPOT
@@ -182,7 +182,7 @@ of GCD (algorithm \ref{lst:LCM}), in the following way:
 \end{algorithm}
 
 When we want to calculate the least common multiplier of several numbers we can
-use the fact that $LCM(a, b, c) = LCM(LCM(a, b), c)$. Because of this property
+use the fact that LCM$(a, b, c) = $LCM$($LCM$(a, b), c)$. Because of this property
 we can calculate the LCM of the current periodicity and the cumulative
 periodicity of all previous wheels, and do so until either the comulative
 periodicity is larger than $10^9$ or we have calculated the periodicity of the
@@ -195,7 +195,7 @@ entire machine.
         \REQUIRE Input: wheels[] \COMMENT{Wheel periodicity}
         \STATE r = 1
         \FOR{each periodicity $p$ in $wheels$}
-            \STATE $r = LCM(r, p)$
+            \STATE $r = $LCM$(r, p)$
             \IF {$r > 10^9$}
                 \PRINT More than a billion.
             \ENDIF
@@ -204,7 +204,7 @@ entire machine.
 \end{algorithm}
 
 \subsection{Time complexity}
-The time complexity for finding the $LCM$ of two numbers $a,b$ is $\mathcal{O}(\log{max(a,b)})$. Total time complexity is $\mathcal{O}(k*log{p_i})$, where $p_i$ is the periodicity and $k$ the number of wheels.
+The time complexity for finding the LCM of two numbers $a,b$ is $\mathcal{O}(\log{max(a,b)})$. Total time complexity is $\mathcal{O}(k \cdot log{p_i})$, where $p_i$ is the periodicity and $k$ the number of wheels.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3) REPEATING DECIMALS *
@@ -338,9 +338,8 @@ fraction as its numerator and denominator.
 between two fractions.  Note that $a/b > c/d$ ($b,d \neq 0$) is the same as $a
 \cdot d > c \cdot b$, which gives better precision.
 
-As the algorithm simply walks down a binary tree the time complexity is
-$O(\log(N))$, where $N$ is the number of nodes in the tree.
-
+\subsection{Time complexity}
+The time complexity of the solution is $\mathcal{O}(P)$, where P is the path length.
 % TODO
 %fraction left(0,1)
 %fraction right(1,0)
