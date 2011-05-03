@@ -159,7 +159,7 @@ The sieve has time complexity $\mathcal{O}(N\log{\log{N}})$. The number of
 primes $\le \sqrt{N}$ is $\mathcal{O}(\sqrt{N})$ and thus reducing a number to
 its prime factors using trial division (as we do) is $\mathcal{O}(\sqrt{N})$.
 The precomputation step would, without any caching, generate a time complexity
-of $\mathcal{O}(\sum_{k=2}^{10^{6}}\sqrt{k}) = O((\sqrt{N})^2) = O(N)$. As we
+of $\mathcal{O}(\sum_{k=2}^{N_{max}}\sqrt{k}) = O((\sqrt{N})^2) = O(N)$. As we
 save computed results in a table, we get the number of factors in constant time
 as soon as we hit a precomputed number (or a prime). The probability that this
 happens is high, since half of the numbers will divide 2, a third of the
