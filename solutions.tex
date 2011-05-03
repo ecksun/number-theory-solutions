@@ -214,8 +214,8 @@ entire machine.
 
 \subsection{Time complexity}
 The time complexity for finding the LCM of two numbers $a,b$ is
-$\mathcal{O}(\log{max(a,b)})$. Total time complexity is $\mathcal{O}(k \cdot
-log{p_i})$, where $p_i$ is the periodicity and $k$ the number of wheels.
+$\mathcal{O}(\log^2{max(a,b)})$. Total time complexity is $\mathcal{O}(k \cdot
+log^2{p_i})$, where $p_i$ is the periodicity and $k$ the number of wheels.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 3) REPEATING DECIMALS *
@@ -474,6 +474,7 @@ This way, we generate all possible semi-prime H-numbers.
 \noindent{What} remains to be done is to count the semi-prime H-numbers. After
 doing this, one can get the answer from the counting array.
 
+\subsection{Time complexity}
 The complexity of the H-prime sieve (algorithm \ref{lst:hsieve}) is
 $O(N\log{\log{N}})$. Iterating over all pairs of H-primes is $O(P^2)$ where $P$
 is the number of primes. And lastly, to count the H-primes is linear, $O(N)$.
